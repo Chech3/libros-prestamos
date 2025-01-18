@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Libro;
+use Illuminate\Http\Request;
+
+class LibroController extends Controller
+{
+    public function index()
+    {
+        $libros = Libro::all();
+        return view('libros.index', compact('libros'));
+    }
+
+    public function create()
+    {
+        return view('libros.create');
+    }
+
+    public function store(Request $request)
+    {
+        Libro::create($request->all());
+        return redirect()->route('libros.index');
+    }
+
+    public function show(Libro $libro)
+    {
+        return view('libros.show', compact('libro'));
+    }
+
+    public function edit(Libro $libro)
+    {
+        // $libro = Libro::findOrFail($id); 
+        return view('libros.edit', compact('libro'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validar los datos enviados por el formulario
+        $request->validate([
+            'nombre_del_libro' => 'required|string|max:255',
+            'nombre_del_autor' => 'required|string|max:255',
+            'género_literario' => 'nullable|string|max:255',
+            'ISBN' => 'nullable|string|max:255',
+            'cantidad' => 'nullable|string|max:255',
+            'editorial' => 'nullable|string|max:255',
+            'idioma' => 'nullable|string|max:255',
+            'nacionalidad' => 'nullable|string|max:255',
+            'código_del_autor' => 'nullable|string|max:255',
+            'número_de_páginas' => 'nullable|string|max:255',
+            'casilla_disponibilidad' => 'nullable|string|max:255',
+        ]);
+
+        // Buscar el libro por ID
+        $libro = Libro::findOrFail($id);
+
+        // Actualizar los datos del libro
+        $libro->update([
+            'nombre_del_libro' => $request->nombre_del_libro,
+            'nombre_del_autor' => $request->nombre_del_autor,
+            'género_literario' => $request->género_literario,
+            'ISBN' => $request->ISBN,
+            'cantidad' => $request->cantidad,
+            'editorial' => $request->editorial,
+            'idioma' => $request->idioma,            
+            'nacionalidad' => $request->nacionalidad,
+            'código_del_autor' => $request->código_del_autor,
+            'número_de_páginas' => $request->número_de_páginas,
+            'casilla_disponibilidad' => $request->casilla_disponibilidad,
+        ]);
+
+        // Redirigir al listado con un mensaje de éxito
+        return redirect()->route('libros.index')->with('success', 'Libro actualizado correctamente');
+
+    }
+
+    public function destroy(Libro $libro)
+    {
+        $libro->delete();
+        return redirect()->route('libros.index');
+    }
+
+}
