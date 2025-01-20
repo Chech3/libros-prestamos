@@ -7,10 +7,21 @@ use Illuminate\Http\Request;
 
 class LibroController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $libros = Libro::all();
-        return view('libros.index', compact('libros'));
+        $query = Libro::query();
+
+    if ($request->filled('nombre')) {
+        $query->where('nombre_del_libro', 'like', '%' . $request->nombre . '%');
+    }
+
+    if ($request->filled('autor')) {
+        $query->where('nombre_del_autor', 'like', '%' . $request->autor . '%');
+    }
+
+    $libros = $query->paginate(10);
+
+    return view('libros.index', compact('libros'));
     }
 
     public function create()

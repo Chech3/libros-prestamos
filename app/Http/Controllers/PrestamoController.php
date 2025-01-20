@@ -9,10 +9,22 @@ use Log;
 
 class PrestamoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $prestamos = Prestamo::all();
+        $query = Prestamo::query();
+
+        if ($request->filled('nombre_del_usuario')) {
+            $query->where('nombre_del_usuario', 'like', '%' . $request->nombre_del_usuario . '%');
+        }
+    
+    
+        $prestamos = $query->paginate(10);
+    
         return view('prestamos.index', compact('prestamos'));
+
+        // $prestamos = Prestamo::paginate(10);
+        
+        // return view('prestamos.index', compact('prestamos'));
     }
 
     public function create()

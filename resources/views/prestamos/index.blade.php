@@ -12,7 +12,15 @@
         @endif
 
         <!-- Botón para crear nuevo libro -->
-        <div class="flex justify-end mb-4">
+        <div class="flex justify-between mb-4">
+            <form class="flex gap-2" method="GET" action="{{ route('prestamos.index') }}">
+                <input class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" type="text" name="nombre_del_usuario" placeholder="Nombre de la persona" value="{{ request('nombre_del_usuario') }}">
+                <div class="flex items-center">
+                    <button class="flex rounded-md bg-blue-200 px-2 py-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm hover:bg-blue-500" type="submit">
+                        <img class="w-6 h-6" src="/evaluacion.png" alt="">
+                    </button>
+                </div>
+            </form>
             <a href="{{ route('prestamos.create') }}"
                 class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">Nuevo Prestamo</a>
         </div>
@@ -75,7 +83,11 @@
                         </tr>
                     @endforeach
                 </tbody>
+                
             </table>
+            <div class="mt-4">
+                {{ $prestamos->links() }}
+            </div>
         </div>
     </div>
 @endsection

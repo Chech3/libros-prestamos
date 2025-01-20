@@ -1,5 +1,3 @@
-
-
 @extends('layouts.app')
 
 
@@ -15,13 +13,30 @@
         @endif
 
         <!-- Botón para crear nuevo libro -->
-        <div class="flex justify-end mb-4">
+        <div class="flex justify-between mb-4">
+            <form class="flex gap-2" method="GET" action="{{ route('libros.index') }}">
+                <input
+                    class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    type="text" name="nombre" placeholder="Nombre del libro" value="{{ request('nombre') }}">
+                <input
+                    class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    type="text" name="autor" placeholder="Autor" value="{{ request('autor') }}">
+                <div class="flex items-center">
+                    <button
+                        class="flex rounded-md bg-blue-200 px-2 py-1 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm hover:bg-blue-500"
+                        type="submit">
+                        <img class="w-6 h-6" src="/evaluacion.png" alt="">
+                    </button>
+                </div>
+            </form>
             <a href="{{ route('libros.create') }}"
                 class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">Nuevo Libro</a>
+
         </div>
 
         <!-- Tabla de libros -->
         <div class="overflow-x-auto">
+
             <table class="min-w-full border-collapse border border-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -57,10 +72,12 @@
                                         Disponible</span>
                                 @endif
                             </td>
+
                             <td class="px-4 py-2 text-sm text-center">
                                 <div class="flex justify-center space-x-2">
 
-                                    <a href="{{ route('libros.show', $libro) }}" class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600">Ver</a>
+                                    <a href="{{ route('libros.show', $libro) }}"
+                                        class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600">Ver</a>
                                     <!-- Botón Editar -->
                                     <a href="{{ route('libros.edit', $libro) }}"
                                         class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>
@@ -79,6 +96,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-4">
+                {{ $libros->links() }}
+            </div>
         </div>
     </div>
 @endsection
