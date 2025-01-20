@@ -60,7 +60,7 @@
                             <td class="px-4 py-2 text-sm text-center">
                                 <div class="flex justify-center space-x-2">
 
-                                    <a href="{{ route('libros.show', $libro) }}" class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600" href="">Ver</a>
+                                    <a href="{{ route('libros.show', $libro) }}" class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600">Ver</a>
                                     <!-- Botón Editar -->
                                     <a href="{{ route('libros.edit', $libro) }}"
                                         class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>

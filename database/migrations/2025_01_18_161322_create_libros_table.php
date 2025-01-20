@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre_del_libro');
             $table->string('nombre_del_autor');
             $table->string('género_literario');
-            $table->string('ISBN');
+            $table->string('ISBN')->unique(); // ISBN único
             $table->string('editorial');
             $table->string('idioma');
             $table->string('nacionalidad');

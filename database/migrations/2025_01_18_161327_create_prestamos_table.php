@@ -18,13 +18,15 @@ return new class extends Migration
             $table->string('barrio');
             $table->string('ciudad');
             $table->string('teléfono');
-            $table->string('nombre_del_libro');
+            $table->unsignedBigInteger('libro_id'); // Relación con libros
             $table->string('asignatura')->nullable();
             $table->date('fecha_de_prestamo');
             $table->date('fecha_de_devolución');
             $table->boolean('sancionado')->default(false);
-            $table->integer('código_del_libro');
+            // $table->integer('código_del_libro');
             $table->timestamps();
+
+            $table->foreign('libro_id')->references('id')->on('libros')->onDelete('cascade');
         });
     }
 

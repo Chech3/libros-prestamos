@@ -84,7 +84,7 @@
             <!-- Disponibilidad -->
             <div>
                 <label for="casilla_disponibilidad" class="block text-sm font-medium text-gray-700">Disponibilidad</label>
-                <select name="casilla_disponibilidad" id="casilla_disponibilidad"
+                <select disabled name="casilla_disponibilidad" id="casilla_disponibilidad"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value="1" {{ $libro->casilla_disponibilidad == 1 ? 'selected' : '' }}>Disponible</option>
                     <option value="0" {{ $libro->casilla_disponibilidad == 0 ? 'selected' : '' }}>No Disponible</option>
@@ -102,7 +102,7 @@
             <!-- Comentario -->
             <div>
                 <label for="comentario" class="block text-sm font-medium text-gray-700">Comentario</label>
-                <textarea name="comentario" id="comentario" rows="4"
+                <textarea disabled name="comentario" id="comentario" rows="4"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ $libro->comentario }}</textarea>
             </div>
 

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Libro extends Model
 {
+
+    // protected $table = 'libros';
+
     protected $fillable = [
         'nombre_del_libro',
         'nombre_del_autor',
@@ -20,4 +23,10 @@ class Libro extends Model
         'cantidad',
         'comentario',
     ];
+
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class, 'libro_id'); // 'libro_id' es la clave foránea en la tabla prestamos
+    }
 }

@@ -47,18 +47,11 @@
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->nombre_del_usuario }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->dirección }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->teléfono }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->nombre_del_libro }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {{ $prestamo->libro->nombre_del_libro ?? 'Libro no encontrado' }} </td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->fecha_de_prestamo }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->fecha_de_devolución }}</td>
-                            {{-- <td class="px-4 py-2 text-sm text-gray-700">
-                                @if ($prestamo->casilla_disponibilidad)
-                                    <span
-                                        class="px-2 py-1 text-xs font-medium text-green-800 bg-green-200 rounded-full">Disponible</span>
-                                @else
-                                    <span class="px-2 py-1 text-xs font-medium text-red-800 bg-red-200 rounded-full">No
-                                        Disponible</span>
-                                @endif
-                            </td> --}}
+                            
                             <td class="px-4 py-2 text-sm text-center">
                                 <div class="flex justify-center space-x-2">
 
@@ -66,7 +59,7 @@
                                         class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600"
                                         href="">Ver</a>
                                     <!-- Botón Editar -->
-                                    <a href="{{ route('prestamos.edit', $prestamo) }}"
+                                    <a href="{{ route('prestamos.edit', $prestamo->id) }}"
                                         class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>
 
                                     <!-- Botón Eliminar -->
