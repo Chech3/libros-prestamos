@@ -7,7 +7,7 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="py-10">
+<body class="py-10 bg-blue-300">
    @yield('content')
 </body>
 

@@ -12,7 +12,7 @@ class Libro extends Model
     protected $fillable = [
         'nombre_del_libro',
         'nombre_del_autor',
-        'género_literario',
+        // 'género_literario',
         'ISBN',
         'editorial',
         'idioma',
@@ -22,6 +22,7 @@ class Libro extends Model
         'casilla_disponibilidad',
         'cantidad',
         'comentario',
+        'categoria_id'
     ];
 
 
@@ -29,4 +30,8 @@ class Libro extends Model
     {
         return $this->hasMany(Prestamo::class, 'libro_id'); // 'libro_id' es la clave foránea en la tabla prestamos
     }
+    public function categoria()
+{
+    return $this->belongsTo(Categoria::class);
+}
 }

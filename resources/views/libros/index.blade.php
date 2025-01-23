@@ -61,7 +61,9 @@
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $loop->iteration }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $libro->nombre_del_libro }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $libro->nombre_del_autor }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $libro->género_literario }}</td>
+                            {{-- <td class="px-4 py-2 text-sm text-gray-700">{{ $libro->género_literario }}</td> --}}
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {{ $libro->categoria->nombre ?? 'Género no encontrado' }} </td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $libro->cantidad }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">
                                 @if ($libro->casilla_disponibilidad)

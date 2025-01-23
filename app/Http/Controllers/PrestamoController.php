@@ -16,8 +16,6 @@ class PrestamoController extends Controller
         if ($request->filled('nombre_del_usuario')) {
             $query->where('nombre_del_usuario', 'like', '%' . $request->nombre_del_usuario . '%');
         }
-    
-    
         $prestamos = $query->paginate(10);
     
         return view('prestamos.index', compact('prestamos'));
@@ -55,7 +53,7 @@ class PrestamoController extends Controller
             'teléfono' => $request->teléfono,
             'libro_id' => $request->libro_id,
             'asignatura' => $request->asignatura, // Si el campo asignatura no es obligatorio, lo puedes añadir también
-            'sancionado' => $request->sancionado ?? false, // Asigna un valor por defecto si no se pasa
+            'sancionado' => $request->sancionado ?? false, 
         ]);
 
         // Reducir la cantidad del libro

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div class="max-w-4xl mx-auto p-6 bg-blue-100 shadow-md rounded-lg">
         <h1 class="text-2xl font-bold mb-6 text-gray-800">Editar Libro</h1>
 
         <form action="{{ route('libros.update', $libro->id) }}" method="POST" class="space-y-6">
@@ -25,12 +25,18 @@
                     required>
             </div>
 
-            <!-- Género Literario -->
+
+            <!-- Categoría -->
             <div>
-                <label for="género_literario" class="block text-sm font-medium text-gray-700">Género Literario</label>
-                <input type="text" name="género_literario" id="género_literario" value="{{ $libro->género_literario }}"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
+                <label class="block text-sm font-medium text-gray-700" for="categoria_id">Categoría</label>
+                <select name="categoria_id" id="categoria_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    @foreach ($categorias as $categoria)
+                        <option value="{{ $categoria->id }}" {{ $libro->categoria_id == $categoria->id ? 'selected' : '' }}>
+                            {{ $categoria->nombre }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- ISBN -->
@@ -76,7 +82,8 @@
             <!-- Número de Páginas -->
             <div>
                 <label for="número_de_páginas" class="block text-sm font-medium text-gray-700">Número de Páginas</label>
-                <input type="number" name="número_de_páginas" id="número_de_páginas" value="{{ $libro->número_de_páginas }}"
+                <input type="number" name="número_de_páginas" id="número_de_páginas"
+                    value="{{ $libro->número_de_páginas }}"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required>
             </div>
@@ -87,7 +94,8 @@
                 <select name="casilla_disponibilidad" id="casilla_disponibilidad"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     <option value="1" {{ $libro->casilla_disponibilidad == 1 ? 'selected' : '' }}>Disponible</option>
-                    <option value="0" {{ $libro->casilla_disponibilidad == 0 ? 'selected' : '' }}>No Disponible</option>
+                    <option value="0" {{ $libro->casilla_disponibilidad == 0 ? 'selected' : '' }}>No Disponible
+                    </option>
                 </select>
             </div>
 
@@ -111,7 +119,8 @@
                 <a href="{{ route('libros.index') }}"
                     class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md shadow hover:bg-gray-300">Cancelar</a>
                 <button type="submit"
-                    class="px-4 py-2 text-white bg-indigo-600 rounded-md shadow hover:bg-indigo-700">Actualizar Libro</button>
+                    class="px-4 py-2 text-white bg-indigo-600 rounded-md shadow hover:bg-indigo-700">Actualizar
+                    Libro</button>
             </div>
         </form>
     @stop

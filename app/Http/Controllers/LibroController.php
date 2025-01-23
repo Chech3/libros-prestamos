@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Libro;
 use Illuminate\Http\Request;
 
@@ -11,22 +12,23 @@ class LibroController extends Controller
     {
         $query = Libro::query();
 
-    if ($request->filled('nombre')) {
-        $query->where('nombre_del_libro', 'like', '%' . $request->nombre . '%');
-    }
+        if ($request->filled('nombre')) {
+            $query->where('nombre_del_libro', 'like', '%' . $request->nombre . '%');
+        }
 
-    if ($request->filled('autor')) {
-        $query->where('nombre_del_autor', 'like', '%' . $request->autor . '%');
-    }
+        if ($request->filled('autor')) {
+            $query->where('nombre_del_autor', 'like', '%' . $request->autor . '%');
+        }
 
-    $libros = $query->paginate(10);
+        $libros = $query->paginate(10);
 
-    return view('libros.index', compact('libros'));
+        return view('libros.index', compact('libros'));
     }
 
     public function create()
     {
-        return view('libros.create');
+        $categorias = Categoria::all();
+        return view('libros.create', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -40,10 +42,17 @@ class LibroController extends Controller
         return view('libros.show', compact('libro'));
     }
 
-    public function edit(Libro $libro)
+    // public function edit(Libro $libro)
+    // {
+    //     // $libro = Libro::findOrFail($id); 
+    //     $categoria = Categoria::all();
+    //     return view('libros.edit', compact('libro', 'categoria'));
+    // }
+    public function edit($id)
     {
-        // $libro = Libro::findOrFail($id); 
-        return view('libros.edit', compact('libro'));
+        $libro = Libro::findOrFail($id);
+        $categorias = Categoria::all();
+        return view('libros.edit', compact('libro', 'categorias'));
     }
 
     public function update(Request $request, $id)
@@ -52,7 +61,7 @@ class LibroController extends Controller
         $request->validate([
             'nombre_del_libro' => 'required|string|max:255',
             'nombre_del_autor' => 'required|string|max:255',
-            'género_literario' => 'nullable|string|max:255',
+            // 'género_literario' => 'nullable|string|max:255',
             'ISBN' => 'nullable|string|max:255',
             'cantidad' => 'nullable|string|max:255',
             'editorial' => 'nullable|string|max:255',
@@ -70,11 +79,11 @@ class LibroController extends Controller
         $libro->update([
             'nombre_del_libro' => $request->nombre_del_libro,
             'nombre_del_autor' => $request->nombre_del_autor,
-            'género_literario' => $request->género_literario,
+            // 'género_literario' => $request->género_literario,
             'ISBN' => $request->ISBN,
             'cantidad' => $request->cantidad,
             'editorial' => $request->editorial,
-            'idioma' => $request->idioma,            
+            'idioma' => $request->idioma,
             'nacionalidad' => $request->nacionalidad,
             'código_del_autor' => $request->código_del_autor,
             'número_de_páginas' => $request->número_de_páginas,

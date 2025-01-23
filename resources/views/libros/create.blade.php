@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div class="max-w-4xl mx-auto p-6 bg-blue-100 shadow-md rounded-lg">
         <h1 class="text-2xl font-bold mb-6 text-gray-800">Crear Libro</h1>
 
         <form action="{{ route('libros.store') }}" method="POST" class="space-y-6">
@@ -26,10 +26,13 @@
 
             <!-- Género Literario -->
             <div>
-                <label for="género_literario" class="block text-sm font-medium text-gray-700">Género Literario</label>
-                <input type="text" name="género_literario" id="género_literario"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
+                <label class="block text-sm font-medium text-gray-700" for="categoria_id">Categoría</label>
+                <select name="categoria_id" id="categoria_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <option value="">Selecciona una categoría</option>
+                    @foreach ($categorias as $categoria)
+                        <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- ISBN -->
