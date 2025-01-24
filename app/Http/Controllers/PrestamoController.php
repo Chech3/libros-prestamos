@@ -79,7 +79,7 @@ class PrestamoController extends Controller
         return view('prestamos.show', compact('prestamo', 'libros'));
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
        // Obtener el préstamo con el ID proporcionado
        $prestamo = Prestamo::findOrFail($id);

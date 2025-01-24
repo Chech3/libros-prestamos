@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('libros.index', absolute: true));
+        return redirect()->intended(route('categorias.index', absolute: true));
     }
 
     /**

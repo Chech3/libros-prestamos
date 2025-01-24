@@ -45,6 +45,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('libros.index', absolute: true));
+        return redirect(route('categorias.index', absolute: true));
     }
 }

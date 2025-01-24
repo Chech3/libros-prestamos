@@ -49,15 +49,19 @@
                     required>
             </div>
 
-            <!-- nombre_del_libro -->
-            <select name="libro_id" id="libro_id"
+            <div>
+                <label for="libro_id" class="block text-sm font-medium text-gray-700">Seleccione un Libro</label>
+                <select disabled name="libro_id" id="libro_id"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required>
-                    <option value="">-- Seleccione un Libro --</option>
+                   
                     @foreach ($libros as $libro)
-                        <option value="{{ $libro->id }}">{{ $libro->nombre_del_libro }} (Stock: {{ $libro->cantidad }})</option>
+                        <option value="{{ $libro->id }}"{{ $prestamo->libro_id == $libro->id ? 'selected' : '' }}>
+                            {{ $libro->nombre_del_libro }}
+                        </option>
                     @endforeach
                 </select>
+            </div>
 
             <!-- asignatura -->
             <div>

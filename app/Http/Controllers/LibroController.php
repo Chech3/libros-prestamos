@@ -79,7 +79,7 @@ class LibroController extends Controller
         $libro->update([
             'nombre_del_libro' => $request->nombre_del_libro,
             'nombre_del_autor' => $request->nombre_del_autor,
-            // 'género_literario' => $request->género_literario,
+            'categoria_id' => $request->categoria_id,
             'ISBN' => $request->ISBN,
             'cantidad' => $request->cantidad,
             'editorial' => $request->editorial,
