@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('categorias', function (Blueprint $table) {
             $table->id(); // ID autoincremental
             $table->string('nombre')->unique(); // Nombre de la categoría
-            $table->timestamps(); // Timestamps (created_at, updated_at)
+            $table->timestamps(); 
         });
     }
 

@@ -15,9 +15,16 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-
+<style>
+    body {
+        background-image: url('{{ asset('/librofondo2.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+</style>
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-blue-100">
+    <div class="min-h-screen ">
         @include('layouts.navigation')
 
         <!-- Page Heading -->

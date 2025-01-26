@@ -23,45 +23,18 @@
         <form action="{{ route('prestamos.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            <!-- Prestamo -->
-            <div>
-                <label for="nombre_del_usuario" class="block text-sm font-medium text-gray-700">Destinario</label>
-                <input type="text" name="nombre_del_usuario" id="nombre_del_usuario"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
+           
 
-            <!-- dirección -->
             <div>
-                <label for="dirección" class="block text-sm font-medium text-gray-700">Dirección</label>
-                <input type="text" name="dirección" id="dirección"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
+                <label class="block text-sm font-medium text-gray-700" for="destinario_id">Destinario</label>
+                <select name="destinario_id" id="destinario_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <option value="">Selecciona un destinario</option>
+                    @foreach ($destinarios as $destinario)
+                        <option value="{{ $destinario->id }}">{{ $destinario->nombre }}</option>
+                    @endforeach
+                </select>
             </div>
-
-            <!-- Barrio -->
-            <div>
-                <label for="barrio" class="block text-sm font-medium text-gray-700">Barrio</label>
-                <input type="text" name="barrio" id="barrio"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
-
-            <!-- Ciudad -->
-            <div>
-                <label for="ciudad" class="block text-sm font-medium text-gray-700">Ciudad</label>
-                <input type="text" name="ciudad" id="ciudad"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
-
-            <!-- Teléfono -->
-            <div>
-                <label for="teléfono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                <input type="number" name="teléfono" id="teléfono"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
+          
 
             <!-- Selección de Libro -->
             <div>

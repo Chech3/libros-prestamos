@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\DestinarioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LibroController;
 use App\Http\Controllers\PrestamoController;
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/libros', LibroController::class);
     Route::resource('/prestamos', PrestamoController::class);
     Route::resource('/categorias', CategoriaController::class);
+    Route::resource('/destinarios', DestinarioController::class);
 });
 
 

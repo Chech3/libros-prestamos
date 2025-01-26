@@ -12,7 +12,6 @@ class Libro extends Model
     protected $fillable = [
         'nombre_del_libro',
         'nombre_del_autor',
-        // 'género_literario',
         'ISBN',
         'editorial',
         'idioma',

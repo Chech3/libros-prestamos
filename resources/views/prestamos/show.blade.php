@@ -9,44 +9,18 @@
             @csrf
             @method('PUT')
 
-            <!-- Nombre del destinario -->
             <div>
-                <label for="nombre_del_usuario" class="block text-sm font-medium text-gray-700">Nombre del Destinario</label>
-                <input disabled type="text" name="nombre_del_usuario" id="nombre_del_usuario" value="{{ $prestamo->nombre_del_usuario }}"
+                <label for="destinario_id" class="block text-sm font-medium text-gray-700">Seleccione un Destinatario</label>
+                <select disabled name="destinario_id" id="destinario_id"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required>
-            </div>
-
-            <!-- dirección -->
-            <div>
-                <label for="dirección" class="block text-sm font-medium text-gray-700">Nombre del Autor</label>
-                <input disabled type="text" name="dirección" id="dirección" value="{{ $prestamo->dirección }}"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
-
-            <!-- barrio -->
-            <div>
-                <label for="barrio" class="block text-sm font-medium text-gray-700">Género Literario</label>
-                <input disabled type="text" name="barrio" id="barrio" value="{{ $prestamo->barrio }}"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
-
-            <!-- ciudad -->
-            <div>
-                <label for="ciudad" class="block text-sm font-medium text-gray-700">Ciudad</label>
-                <input disabled type="text" name="ciudad" id="ciudad" value="{{ $prestamo->ciudad }}"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
-
-            <!-- teléfono -->
-            <div>
-                <label for="teléfono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                <input disabled type="text" name="teléfono" id="teléfono" value="{{ $prestamo->teléfono }}"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
+                    @foreach ($destinarios as $destinario)
+                        <option value="{{ $destinario->id }}"
+                            {{ $prestamo->destinario_id == $destinario->id ? 'selected' : '' }}>
+                            {{ $destinario->nombre }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div>

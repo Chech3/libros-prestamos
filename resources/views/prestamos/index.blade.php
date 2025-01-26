@@ -33,10 +33,7 @@
                         <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">#</th>
                         <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Destinario
                         </th>
-                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Dirección
-                        </th>
-                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Teléfono
-                        </th>
+                        
                         <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Nombre del
                             Libro
                         </th>
@@ -52,13 +49,13 @@
                     @foreach ($prestamos as $prestamo)
                         <tr>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $loop->iteration }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->nombre_del_usuario }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->dirección }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->teléfono }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {{ $prestamo->destinario->nombre ?? 'Destinario no encontrado' }} </td>
                             <td class="px-4 py-2 text-sm text-gray-700">
                                 {{ $prestamo->libro->nombre_del_libro ?? 'Libro no encontrado' }} </td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->fecha_de_prestamo }}</td>
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->fecha_de_devolución }}</td>
+                            
                             
                             <td class="px-4 py-2 text-sm text-center">
                                 <div class="flex justify-center space-x-2">

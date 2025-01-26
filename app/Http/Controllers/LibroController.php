@@ -37,17 +37,14 @@ class LibroController extends Controller
         return redirect()->route('libros.index');
     }
 
-    public function show(Libro $libro)
+    public function show($id)
     {
-        return view('libros.show', compact('libro'));
+        $libro = Libro::findOrFail($id);
+        $categorias = Categoria::all();
+        return view('libros.show', compact('libro', 'categorias'));
     }
 
-    // public function edit(Libro $libro)
-    // {
-    //     // $libro = Libro::findOrFail($id); 
-    //     $categoria = Categoria::all();
-    //     return view('libros.edit', compact('libro', 'categoria'));
-    // }
+   
     public function edit($id)
     {
         $libro = Libro::findOrFail($id);

@@ -8,10 +8,7 @@ class Prestamo extends Model
 {
     protected $fillable = [
         'nombre_del_usuario',
-        'dirección',
-        'barrio',
-        'ciudad',
-        'teléfono',
+        'destinario_id',
         'libro_id',
         'asignatura',
         'fecha_de_prestamo',
@@ -25,4 +22,10 @@ class Prestamo extends Model
     {
         return $this->belongsTo(Libro::class, 'libro_id'); // 'libro_id' es la clave foránea
     }
+
+    public function destinario()
+    {
+        return $this->belongsTo(Destinario::class);
+    }
+
 }
