@@ -65,24 +65,7 @@ class PrestamoController extends Controller
                 return redirect()->back()->withErrors(['error' => 'El libro no está disponible']);
             }
 
-            // Cargar relaciones necesarias
-            $prestamo->load('destinario');
-
-            // Generar el PDF
-            $pdf = Pdf::loadView('prestamos.pdf', compact('prestamo', 'libro'));
-
-            // Crear el directorio si no existe
-            $reportesPath = storage_path('app/public/reportes');
-            if (!file_exists($reportesPath)) {
-                mkdir($reportesPath, 0777, true); // Crea el directorio con permisos
-            }
-
-            // Guardar el PDF en el servidor
-            $pdfPath = $reportesPath . '/prestamo_' . $prestamo->id . '.pdf';
-            $pdf->save($pdfPath);
-
-            // Almacenar la ruta del PDF en la sesión
-            Session::put('pdf_download', $pdfPath);
+          
 
             // Redirigir a la vista prestamos.index
             return redirect()->route('prestamos.index')->with('success', 'Préstamo registrado correctamente');
@@ -104,7 +87,6 @@ class PrestamoController extends Controller
 
     public function edit($id)
     {
-
         // Obtener todos los libros para el select
         $libros = Libro::all();
 
@@ -115,6 +97,7 @@ class PrestamoController extends Controller
         // Retornar la vista con el préstamo y los libros
         return view('prestamos.edit', compact('prestamo', 'libros', 'destinarios'));
     }
+
 
     public function update(Request $request, Prestamo $prestamo)
     {
@@ -135,10 +118,14 @@ class PrestamoController extends Controller
 
         return redirect()->route('prestamos.index');
     }
-    public function clearPdfSession()
+
+    public function imprimir($id)
     {
-        // Eliminar la sesión del PDF
-        Session::forget('pdf_download');
-        return response()->json(['success' => true]);
+        $prestamo = Prestamo::findOrFail($id);
+        $destinario = Destinario::findOrFail($prestamo->destinario_id);
+        $libro = Libro::findOrFail($prestamo->libro_id);
+
+        $pdf = Pdf::loadView('prestamos.pdf', compact('prestamo', 'destinario', 'libro'));
+        return $pdf->download('reporte_prestamo_' . $prestamo->id . '.pdf');
     }
 }

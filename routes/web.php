@@ -26,9 +26,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reporte-libros', [App\Http\Controllers\ReporteController::class, 'index'])->name('reporte.libros');
     Route::post('/reporte-libros', [App\Http\Controllers\ReporteController::class, 'generarReporte'])->name('reporte.libros.generar');
+
+    Route::get('/reporte-prestamo/{prestamo}', [App\Http\Controllers\PrestamoController::class, 'imprimir'])->name('imprimir.prestamo');
     
 
-Route::get('/clear-pdf-session', [PrestamoController::class, 'clearPdfSession'])->name('clear.pdf.session');
 });
 
 

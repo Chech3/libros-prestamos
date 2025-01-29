@@ -79,6 +79,12 @@
                                 <div class="flex justify-center space-x-2">
                                     <a href="{{ route('prestamos.show', $prestamo) }}"
                                         class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600">Ver</a>
+
+
+                                        <a href="{{ route('imprimir.prestamo', $prestamo) }}"
+                                        class="px-3 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600">imprimir</a>
+
+
                                     <a href="{{ route('prestamos.edit', $prestamo->id) }}"
                                         class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>
                                     <form action="{{ route('prestamos.destroy', $prestamo->id) }}" method="POST"
@@ -125,28 +131,29 @@
         </script>
     @endif
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const table = document.getElementById('prestamos-table');
             const rows = table.getElementsByTagName('tr');
-    
+
             // Obtener la fecha actual
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Ignorar la hora, solo comparar fechas
-    
+
             // Recorrer las filas de la tabla (empezando desde 1 para omitir el encabezado)
             for (let i = 1; i < rows.length; i++) {
                 const cells = rows[i].getElementsByTagName('td');
                 const fechaDevolucionCell = cells[4]; // La celda de la fecha de devolución (índice 4)
-    
+
                 // Obtener la fecha de devolución del texto de la celda
                 const fechaDevolucionText = fechaDevolucionCell.textContent.trim();
                 const fechaDevolucion = new Date(fechaDevolucionText);
-    
+
                 // Comparar fechas
                 if (fechaDevolucion < today) {
                     // Aplicar estilo a la fila
                     rows[i].classList.add('bg-red-100'); // Fondo rojo claro
-                    fechaDevolucionCell.innerHTML = `<span class="text-red-600 font-bold">${fechaDevolucionText} (Atrasado)</span>`;
+                    fechaDevolucionCell.innerHTML =
+                        `<span class="text-red-600 font-bold">${fechaDevolucionText} (Atrasado)</span>`;
                 }
             }
         });
