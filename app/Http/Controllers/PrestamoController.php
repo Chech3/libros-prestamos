@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Destinario;
 use App\Models\Libro;
 use App\Models\Prestamo;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Log;
 
 class PrestamoController extends Controller
@@ -37,25 +39,20 @@ class PrestamoController extends Controller
     {
         // Validar los datos de entrada
         $request->validate([
-            // 'nombre_del_usuario' => 'required|string',
+            'destinario_id' => 'required|string',
             'fecha_de_prestamo' => 'required|date',
             'fecha_de_devolución' => 'required|date|after:fecha_de_prestamo',
-            'libro_id' => 'required|exists:libros,id', // Asegúrate de validar el campo libro_id
+            'libro_id' => 'required|exists:libros,id',
         ]);
 
         try {
             // Crear el préstamo
             $prestamo = Prestamo::create([
-                // 'nombre_del_usuario' => $request->nombre_del_usuario,
                 'fecha_de_prestamo' => $request->fecha_de_prestamo,
                 'fecha_de_devolución' => $request->fecha_de_devolución,
                 'destinario_id' => $request->destinario_id,
-                // 'dirección' => $request->dirección,
-                // 'barrio' => $request->barrio,
-                // 'ciudad' => $request->ciudad,
-                // 'teléfono' => $request->teléfono,
                 'libro_id' => $request->libro_id,
-                'asignatura' => $request->asignatura, // Si el campo asignatura no es obligatorio, lo puedes añadir también
+                'asignatura' => $request->asignatura,
                 'sancionado' => $request->sancionado ?? false,
             ]);
 
@@ -68,7 +65,28 @@ class PrestamoController extends Controller
                 return redirect()->back()->withErrors(['error' => 'El libro no está disponible']);
             }
 
+            // Cargar relaciones necesarias
+            $prestamo->load('destinario');
+
+            // Generar el PDF
+            $pdf = Pdf::loadView('prestamos.pdf', compact('prestamo', 'libro'));
+
+            // Crear el directorio si no existe
+            $reportesPath = storage_path('app/public/reportes');
+            if (!file_exists($reportesPath)) {
+                mkdir($reportesPath, 0777, true); // Crea el directorio con permisos
+            }
+
+            // Guardar el PDF en el servidor
+            $pdfPath = $reportesPath . '/prestamo_' . $prestamo->id . '.pdf';
+            $pdf->save($pdfPath);
+
+            // Almacenar la ruta del PDF en la sesión
+            Session::put('pdf_download', $pdfPath);
+
+            // Redirigir a la vista prestamos.index
             return redirect()->route('prestamos.index')->with('success', 'Préstamo registrado correctamente');
+
         } catch (\Exception $e) {
             Log::error('Error al registrar préstamo: ' . $e->getMessage());
             return back()->withErrors('Error al registrar el préstamo. Intenta nuevamente.');
@@ -76,17 +94,17 @@ class PrestamoController extends Controller
     }
 
 
-    public function show( $id)
+    public function show($id)
     {
         $libros = Libro::all();
         $prestamo = Prestamo::findOrFail($id);
         $destinarios = Destinario::all();
-        return view('prestamos.show', compact('prestamo', 'libros','destinarios'));
+        return view('prestamos.show', compact('prestamo', 'libros', 'destinarios'));
     }
 
     public function edit($id)
     {
-        
+
         // Obtener todos los libros para el select
         $libros = Libro::all();
 
@@ -107,6 +125,20 @@ class PrestamoController extends Controller
     public function destroy(Prestamo $prestamo)
     {
         $prestamo->delete();
+        $libro = Libro::find($prestamo->libro_id);
+        if ($libro->cantidad > 0) {
+            $libro->cantidad += 1;
+            $libro->save();
+        } else {
+            return redirect()->back()->withErrors(['error' => 'El libro no está disponible']);
+        }
+
         return redirect()->route('prestamos.index');
+    }
+    public function clearPdfSession()
+    {
+        // Eliminar la sesión del PDF
+        Session::forget('pdf_download');
+        return response()->json(['success' => true]);
     }
 }

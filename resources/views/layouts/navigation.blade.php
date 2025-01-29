@@ -16,13 +16,16 @@
                         {{ __('Libros') }}
                     </x-nav-link>
                     <x-nav-link :href="route('destinarios.index')" :active="request()->routeIs('destinarios.index')">
-                        {{ __('Destinarios') }}
+                        {{ __('Usuarios') }}
                     </x-nav-link>
                     <x-nav-link :href="route('prestamos.index')" :active="request()->routeIs('prestamos.index')">
                         {{ __('Prestamos') }}
                     </x-nav-link>
                     <x-nav-link :href="route('categorias.index')" :active="request()->routeIs('categorias.index')">
                         {{ __('Categorias') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('reporte.libros')" :active="request()->routeIs('reporte.libros')">
+                        {{ __('Reportes') }}
                     </x-nav-link>
                 </div>
             </div>

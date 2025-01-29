@@ -5,7 +5,6 @@ use App\Http\Controllers\DestinarioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LibroController;
 use App\Http\Controllers\PrestamoController;
-
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,7 +23,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('/prestamos', PrestamoController::class);
     Route::resource('/categorias', CategoriaController::class);
     Route::resource('/destinarios', DestinarioController::class);
+
+    Route::get('/reporte-libros', [App\Http\Controllers\ReporteController::class, 'index'])->name('reporte.libros');
+    Route::post('/reporte-libros', [App\Http\Controllers\ReporteController::class, 'generarReporte'])->name('reporte.libros.generar');
+    
+
+Route::get('/clear-pdf-session', [PrestamoController::class, 'clearPdfSession'])->name('clear.pdf.session');
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

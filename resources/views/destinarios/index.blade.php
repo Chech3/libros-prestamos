@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-lg">
-        <h1 class="text-2xl font-bold mb-6 text-gray-800">Listado de Destinarios</h1>
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">Listado de Usuario</h1>
 
         <!-- Mensaje de éxito -->
         @if (session('success'))
@@ -29,7 +29,7 @@
             </form>
 
             <a href="{{ route('destinarios.create') }}"
-                class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">Nuevo destinario</a>
+                class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">Nuevo Usuario</a>
 
 
         </div>
