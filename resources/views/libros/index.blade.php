@@ -79,19 +79,20 @@
                                 <div class="flex justify-center space-x-2">
 
                                     <a href="{{ route('libros.show', $libro) }}"
-                                        class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600">Ver</a>
+                                        class="px-3 py-1 flex justify-center items-center rounded-md bg-purple-500 hover:bg-purple-600 transition-all">
+                                        <img class="w-4 h-4" src="/lupa.svg" alt="">
+                                    </a>
+
+
                                     <!-- Botón Editar -->
                                     <a href="{{ route('libros.edit', $libro) }}"
-                                        class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>
+                                        class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600 flex items-center justify-center">
+                                        <img class="w-4 h-4" src="/edit.svg" alt="">
+                                    </a>
 
                                     <!-- Botón Eliminar -->
-                                    <form action="{{ route('libros.destroy', $libro->id) }}" method="POST"
-                                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este libro?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-3 py-1 text-xs text-white bg-red-500 rounded-md hover:bg-red-600">Eliminar</button>
-                                    </form>
+                                    <x-delete-button url="{{ route('libros.destroy', $libro->id) }}"/>
+                                    
                                 </div>
                             </td>
                         </tr>

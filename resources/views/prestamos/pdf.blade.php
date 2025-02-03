@@ -39,11 +39,12 @@
 <body>
 
     <h2>Reporte de Préstamo</h2>
-
-    <p><strong> Libro:</strong> {{ $prestamo->libro->nombre_del_libro }}</p>
-    <p><strong> Destinatario:</strong> {{ $prestamo->destinario->nombre ?? 'No disponible' }}</p>
-    <p><strong> Fecha del Préstamo:</strong> {{ $prestamo->fecha_de_prestamo }}</p>
-    <p><strong> Fecha de Devolución:</strong> {{ $prestamo->fecha_de_devolución }}</p>
+    <div>
+        <p><strong> Libro:</strong> {{ $prestamo->libro->nombre_del_libro }}</p>
+        <p><strong> Destinatario:</strong> {{ $prestamo->destinario->nombre ?? 'No disponible' }}</p>
+        <p><strong> Fecha del Préstamo:</strong> {{ $prestamo->fecha_de_prestamo }}</p>
+        <p><strong> Fecha de Devolución:</strong> {{ $prestamo->fecha_de_devolución }}</p>
+    </div>
 
     <!-- Espacio para la firma -->
     <div class="firma">

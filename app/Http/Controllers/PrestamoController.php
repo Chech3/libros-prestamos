@@ -126,6 +126,6 @@ class PrestamoController extends Controller
         $libro = Libro::findOrFail($prestamo->libro_id);
 
         $pdf = Pdf::loadView('prestamos.pdf', compact('prestamo', 'destinario', 'libro'));
-        return $pdf->download('reporte_prestamo_' . $prestamo->id . '.pdf');
+        return $pdf->stream('reporte_prestamo_' . $prestamo->id . '.pdf');
     }
 }

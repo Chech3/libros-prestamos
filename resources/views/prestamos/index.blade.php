@@ -76,24 +76,25 @@
                                 @endif
                             </td>
                             <td class="px-4 py-2 text-sm text-center">
-                                <div class="flex justify-center space-x-2">
+                                <div class="flex justify-center space-x-2 ">
                                     <a href="{{ route('prestamos.show', $prestamo) }}"
-                                        class="px-3 py-1 text-xs text-white bg-purple-500 rounded-md hover:bg-purple-600">Ver</a>
-
-
-                                        <a href="{{ route('imprimir.prestamo', $prestamo) }}"
-                                        class="px-3 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600">imprimir</a>
-
+                                        class="px-3 py-1 flex justify-center items-center rounded-md bg-purple-500 hover:bg-purple-600 transition-all">
+                                        <img class="w-4 h-4" src="/lupa.svg" alt="">
+                                    </a>
 
                                     <a href="{{ route('prestamos.edit', $prestamo->id) }}"
-                                        class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>
-                                    <form action="{{ route('prestamos.destroy', $prestamo->id) }}" method="POST"
-                                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar este libro?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-3 py-1 text-xs text-white bg-red-500 rounded-md hover:bg-red-600">Eliminar</button>
-                                    </form>
+                                        class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600 flex items-center justify-center transition-all">
+                                        <img class="w-4 h-4" src="/edit.svg" alt="">
+                                    </a>
+
+                                    <a target="_blank" href="{{ route('imprimir.prestamo', $prestamo) }}"
+                                        class="px-3 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600 transition-all">
+                                        <img class="w-6 h-6" src="/imprimit.svg" alt="">
+                                    </a>
+
+
+                                    <x-delete-button url="{{ route('prestamos.destroy', $prestamo->id) }}" />
+
                                 </div>
                             </td>
                         </tr>
@@ -106,36 +107,11 @@
         </div>
     </div>
 
-    @if (Session::has('pdf_download'))
-        <script>
-            // Función para descargar el PDF
-            function downloadPDF(url) {
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'prestamo.pdf'; // Nombre del archivo
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-
-            // Descargar el PDF almacenado en la sesión
-            downloadPDF("{{ asset('storage/reportes/' . basename(Session::get('pdf_download'))) }}");
-
-            // Eliminar la sesión después de descargar
-            fetch("{{ route('clear.pdf.session') }}", {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                }
-            });
-        </script>
-    @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const table = document.getElementById('prestamos-table');
             const rows = table.getElementsByTagName('tr');
 
-            // Obtener la fecha actual
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Ignorar la hora, solo comparar fechas
 

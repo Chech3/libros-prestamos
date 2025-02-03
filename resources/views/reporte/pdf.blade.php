@@ -44,7 +44,7 @@
         <h2>Categoría: {{ $categoria->nombre }}</h2>
     </div>
     @if ($libros->isEmpty())
-        <p>No hay libros registrados en esta categoría.</p>
+        <h2 style="text-align: center">No hay libros registrados en esta categoría.</h2>
     @else
         <table>
             <thead>

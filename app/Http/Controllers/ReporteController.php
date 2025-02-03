@@ -31,7 +31,7 @@ class ReporteController extends Controller
         $pdf = Pdf::loadView('reporte.pdf', compact('libros', 'categoria'));
         
         // Descargar el archivo PDF
-        return $pdf->download('reporte_libros_categoria_' . $categoria->nombre . '.pdf');
+        return $pdf->stream('reporte_libros_categoria_' . $categoria->nombre . '.pdf');
     }
 }
 

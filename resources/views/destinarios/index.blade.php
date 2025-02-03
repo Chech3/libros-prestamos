@@ -65,15 +65,12 @@
                             <td class="px-4 py-2 text-sm text-gray-700">{{ $destinario->direccion }}</td>
                             <td class="flex justify-center space-x-2">
                                 <a href="{{ route('destinarios.edit', $destinario) }}"
-                                    class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Editar</a>
-                                <form action="{{ route('destinarios.destroy', $destinario) }}" method="POST"
-                                    style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="px-3 py-1 text-xs text-white bg-red-500 rounded-md hover:bg-red-600"
-                                        onclick="return confirm('¿Estás seguro de eliminar esta categoría?')">Eliminar</button>
-                                </form>
+                                    class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600 flex items-center justify-center">
+                                    <img class="w-4 h-4" src="/edit.svg" alt="">
+                                </a>
+
+                                <x-delete-button url="{{ route('destinarios.destroy', $destinario) }}"/>
+                                
                             </td>
                         </tr>
                     @endforeach
