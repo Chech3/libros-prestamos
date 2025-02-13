@@ -78,6 +78,7 @@
                allowClear: true
            });
        });
+       
        </script>
     @stop
         
