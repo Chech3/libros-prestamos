@@ -17,6 +17,8 @@
         </div>
     @endif
 
+
+
     <div class="max-w-4xl mx-auto p-6 bg-blue-100 shadow-md rounded-lg">
         <h1 class="text-2xl font-bold mb-6 text-gray-800">Registrar Préstamo</h1>
 
@@ -37,17 +39,17 @@
 
             <!-- Selección de Libro -->
             <div>
-                <label for="libro_id" class="block text-sm font-medium text-gray-700">Seleccione un Libro</label>
-                <select name="libro_id" id="libro_id"
+                <label for="libros" class="block text-sm font-medium text-gray-700">Seleccione uno o varios Libros</label>
+                <select name="libro_id[]" id="libros" multiple
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required>
-                    <option value="">-- Seleccione un Libro --</option>
                     @foreach ($libros as $libro)
                         <option value="{{ $libro->id }}">{{ $libro->nombre_del_libro }} (Stock: {{ $libro->cantidad }})
                         </option>
                     @endforeach
                 </select>
             </div>
+
 
             <!-- Asignatura -->
             <div>
@@ -65,15 +67,14 @@
             </div>
 
             <!-- Fecha de Devolución-->
+
             <div>
                 <label for="fecha_de_devolución" class="block text-sm font-medium text-gray-700">Fecha de Devolución</label>
-                <input type="date" name="fecha_de_devolución" id="fecha_de_devolución"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    required>
-            </div>
-
-            <div id="error-message" class="text-red-500 text-sm mt-2 hidden">
-                La fecha de devolución no puede ser anterior a la fecha del préstamo.
+                <input type="date" name="fecha_de_devolución" id="fecha_de_devolución" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <div id="error-message" class="text-red-500 text-sm mt-2 hidden">
+                    La fecha de devolución no puede ser anterior a la fecha del préstamo.
+                </div>
             </div>
 
             <!-- Sancionado -->
@@ -99,26 +100,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const dateInput = document.getElementById('fecha_de_prestamo');
-            const today = new Date();
             const fechaPrestamo = document.getElementById('fecha_de_prestamo');
             const fechaDevolucion = document.getElementById('fecha_de_devolución');
             const errorMessage = document.getElementById('error-message');
+            const submitBtn = document.getElementById('submitBtn');
+            const today = new Date().toISOString().split('T')[0];
+
+            fechaPrestamo.value = today;
+            fechaPrestamo.setAttribute('min', today);
+            fechaDevolucion.setAttribute('min', today);
 
             function validarFechas() {
-                const fechaPrestamoValue = new Date(fechaPrestamo.value);
-                const fechaDevolucionValue = new Date(fechaDevolucion.value);
-                if (fechaDevolucionValue < fechaPrestamoValue) {
-
+                if (new Date(fechaDevolucion.value) < new Date(fechaPrestamo.value)) {
                     errorMessage.classList.remove('hidden');
+                    submitBtn.disabled = true;
                 } else {
-
                     errorMessage.classList.add('hidden');
+                    submitBtn.disabled = false;
                 }
             }
+
             fechaPrestamo.addEventListener('change', validarFechas);
             fechaDevolucion.addEventListener('change', validarFechas);
-            dateInput.value = today.toISOString().split('T')[0];
+        });
+
+        $(document).ready(function() {
+            $('#libros').select2({
+                placeholder: "Seleccione uno o varios libros",
+                allowClear: true
+            });
         });
     </script>
 

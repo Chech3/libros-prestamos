@@ -11,7 +11,7 @@
             </div>
         @endif
 
-        <!-- Botón para crear nuevo libro -->
+        <!-- Filtro de usuario -->
         <div class="flex justify-between mb-4">
             <form class="flex gap-2" method="GET" action="{{ route('prestamos.index') }}">
                 <input
@@ -36,69 +36,61 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">#</th>
-                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Usuario
-                        </th>
-                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Nombre del
-                            Libro</th>
-                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Fecha de
-                            Prestamo</th>
-                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Fecha de
-                            Devolucion</th>
-                        <th class="px-4 py-2 border border-gray-200 text-center text-sm font-medium text-gray-700">Acciones
-                        </th>
+                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Usuario</th>
+                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Nombre del Libro</th>
+                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Fecha de Prestamo</th>
+                        <th class="px-4 py-2 border border-gray-200 text-left text-sm font-medium text-gray-700">Fecha de Devolucion</th>
+                        <th class="px-4 py-2 border border-gray-200 text-center text-sm font-medium text-gray-700">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @foreach ($prestamos as $prestamo)
-                        @php
-                            // Definir el rango de proximidad (3 días antes de la fecha de devolución)
-                            $proximityDays = 3;
-                            $dueDate = \Carbon\Carbon::parse($prestamo->fecha_de_devolución);
-                            $now = \Carbon\Carbon::now();
-                            $isDueSoon = $now->diffInDays($dueDate) <= $proximityDays && $dueDate->gt($now);
-                        @endphp
-
-                        <tr class="@if ($isDueSoon) bg-yellow-100 @endif">
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $loop->iteration }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
-                                {{ $prestamo->destinario->nombre ?? 'Destinario no encontrado' }}
-                            </td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
-                                {{ $prestamo->libro->nombre_del_libro ?? 'Libro no encontrado' }}
-                            </td>
-                            <td class="px-4 py-2 text-sm text-gray-700">{{ $prestamo->fecha_de_prestamo }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
-                                @if ($isDueSoon)
-                                    <span class="text-red-600 font-bold">{{ $prestamo->fecha_de_devolución }} (Próximo a
-                                        vencer)</span>
-                                @else
-                                    {{ $prestamo->fecha_de_devolución }}
-                                @endif
-                            </td>
-                            <td class="px-4 py-2 text-sm text-center">
-                                <div class="flex justify-center space-x-2 ">
-                                    <a href="{{ route('prestamos.show', $prestamo) }}"
-                                        class="px-3 py-1 flex justify-center items-center rounded-md bg-purple-500 hover:bg-purple-600 transition-all">
-                                        <img class="w-4 h-4" src="/lupa.svg" alt="">
-                                    </a>
-
-                                    <a href="{{ route('prestamos.edit', $prestamo->id) }}"
-                                        class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600 flex items-center justify-center transition-all">
-                                        <img class="w-4 h-4" src="/edit.svg" alt="">
-                                    </a>
-
-                                    <a target="_blank" href="{{ route('imprimir.prestamo', $prestamo) }}"
-                                        class="px-3 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600 transition-all">
-                                        <img class="w-6 h-6" src="/imprimit.svg" alt="">
-                                    </a>
-
-
-                                    <x-delete-button url="{{ route('prestamos.destroy', $prestamo->id) }}" />
-
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                    @foreach ($prestamos as $destinario_id => $usuario_prestamos)
+                    @php
+                        $primero = $usuario_prestamos->first();
+                        // dd($primero);  // Verifica qué datos contiene
+                    @endphp
+                    <tr>
+                        <td class="px-4 py-2 text-sm text-gray-700">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2 text-sm text-gray-700">
+                            {{ $primero->destinario->nombre ?? 'Destinario no encontrado' }}
+                        </td>
+                        <td class="px-4 py-2 text-sm text-gray-700">
+                            <ul>
+                                @foreach ($usuario_prestamos as $prestamo)
+                                    <li>{{ $prestamo->libro->nombre_del_libro ?? 'Libro no encontrado' }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td class="px-4 py-2 text-sm text-gray-700">
+                            @foreach ($usuario_prestamos as $prestamo)
+                                <p>{{ $prestamo->fecha_de_prestamo }}</p>
+                            @endforeach
+                        </td>
+                        <td class="px-4 py-2 text-sm text-gray-700">
+                            @foreach ($usuario_prestamos as $prestamo)
+                                <p>{{ $prestamo->fecha_de_devolución }}</p>
+                            @endforeach
+                        </td>
+                        <td class="px-4 py-2 text-sm text-center">
+                            <div class="flex justify-center space-x-2">
+                                <a href="{{ route('prestamos.show', $primero) }}"
+                                   class="px-3 py-1 flex justify-center items-center rounded-md bg-purple-500 hover:bg-purple-600 transition-all">
+                                    <img class="w-4 h-4" src="/lupa.svg" alt="">
+                                </a>
+                                <a href="{{ route('prestamos.edit', $primero->id) }}"
+                                   class="px-3 py-1 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600 flex items-center justify-center transition-all">
+                                    <img class="w-4 h-4" src="/edit.svg" alt="">
+                                </a>
+                                <a target="_blank" href="{{ route('imprimir.prestamo', $primero) }}"
+                                   class="px-3 py-1 text-xs text-white bg-green-500 rounded-md hover:bg-green-600 transition-all">
+                                    <img class="w-6 h-6" src="/imprimit.svg" alt="">
+                                </a>
+                                <x-delete-button url="{{ route('prestamos.destroy', $primero->id) }}" />
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                
                 </tbody>
             </table>
             <div class="mt-4">

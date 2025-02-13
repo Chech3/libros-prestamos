@@ -23,15 +23,13 @@
                 </select>
             </div>
 
-            
             <div>
-                <label for="libro_id" class="block text-sm font-medium text-gray-700">Seleccione un Libro</label>
-                <select name="libro_id" id="libro_id"
+                <label for="libro_id" class="block text-sm font-medium text-gray-700">Seleccione Libros</label>
+                <select name="libro_id[]" id="libro_id" multiple
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     required>
-
                     @foreach ($libros as $libro)
-                        <option value="{{ $libro->id }}"{{ $prestamo->libro_id == $libro->id ? 'selected' : '' }}>
+                        <option value="{{ $libro->id }}" {{ in_array($libro->id, (array) $prestamo->libro_id) ? 'selected' : '' }}>
                             {{ $libro->nombre_del_libro }}
                         </option>
                     @endforeach
@@ -73,6 +71,14 @@
                     class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md shadow hover:bg-gray-300">Volver</a>
             </div>
         </form>
+        <script>
+            $(document).ready(function() {
+           $('#libro_id').select2({
+               placeholder: "Seleccione uno o varios libros",
+               allowClear: true
+           });
+       });
+       </script>
     @stop
-
+        
 </div>

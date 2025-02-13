@@ -7,26 +7,34 @@ use App\Models\Libro;
 use App\Models\Prestamo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Log;
 
 class PrestamoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Prestamo::query();
+        $query = Prestamo::with(['destinario', 'libro']); // Cargar relaciones
 
+        // Filtrar por nombre del usuario si se proporciona
         if ($request->filled('nombre_del_usuario')) {
-            $query->where('nombre_del_usuario', 'like', '%' . $request->nombre_del_usuario . '%');
+            $query->whereHas('destinario', function ($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->nombre_del_usuario . '%');
+            });
         }
-        $prestamos = $query->paginate(10);
+
+        // Obtener los préstamos con paginación
+        $prestamos = $query->paginate(10); // Paginación de 10 elementos por página
+
+        // Agrupar los préstamos por 'destinario_id' después de la paginación
+        $prestamosGrouped = $prestamos->getCollection()->groupBy('destinario_id');
+
+        // Reemplazar la colección de la paginación con la agrupada
+        $prestamos->setCollection(collect($prestamosGrouped));
 
         return view('prestamos.index', compact('prestamos'));
-
-        // $prestamos = Prestamo::paginate(10);
-
-        // return view('prestamos.index', compact('prestamos'));
     }
+
+
 
     public function create()
     {
@@ -42,32 +50,33 @@ class PrestamoController extends Controller
             'destinario_id' => 'required|string',
             'fecha_de_prestamo' => 'required|date',
             'fecha_de_devolución' => 'required|date|after:fecha_de_prestamo',
-            'libro_id' => 'required|exists:libros,id',
+            'libro_id' => 'required|array|min:1',  // Asegurar que es un array con al menos un elemento
+            'libro_id.*' => 'exists:libros,id',
         ]);
 
         try {
-            // Crear el préstamo
-            $prestamo = Prestamo::create([
-                'fecha_de_prestamo' => $request->fecha_de_prestamo,
-                'fecha_de_devolución' => $request->fecha_de_devolución,
-                'destinario_id' => $request->destinario_id,
-                'libro_id' => $request->libro_id,
-                'asignatura' => $request->asignatura,
-                'sancionado' => $request->sancionado ?? false,
-            ]);
+            foreach ($request->libro_id as $libroId) {
+                // Buscar el libro
+                $libro = Libro::find($libroId);
 
-            // Reducir la cantidad del libro
-            $libro = Libro::find($request->libro_id);
-            if ($libro->cantidad > 0) {
-                $libro->cantidad -= 1;
-                $libro->save();
-            } else {
-                return redirect()->back()->withErrors(['error' => 'El libro no está disponible']);
+                if ($libro && $libro->cantidad > 0) {
+                    // Crear el préstamo
+                    Prestamo::create([
+                        'fecha_de_prestamo' => $request->fecha_de_prestamo,
+                        'fecha_de_devolución' => $request->fecha_de_devolución,
+                        'destinario_id' => $request->destinario_id,
+                        'libro_id' => $libroId,
+                        'asignatura' => $request->asignatura,
+                        'sancionado' => $request->sancionado ?? false,
+                    ]);
+
+                    // Restar 1 a la cantidad de libros disponibles
+                    $libro->decrement('cantidad');
+                } else {
+                    return back()->withErrors("El libro con ID {$libroId} no está disponible.");
+                }
             }
 
-          
-
-            // Redirigir a la vista prestamos.index
             return redirect()->route('prestamos.index')->with('success', 'Préstamo registrado correctamente');
 
         } catch (\Exception $e) {
@@ -75,6 +84,7 @@ class PrestamoController extends Controller
             return back()->withErrors('Error al registrar el préstamo. Intenta nuevamente.');
         }
     }
+
 
 
     public function show($id)
@@ -87,22 +97,56 @@ class PrestamoController extends Controller
 
     public function edit($id)
     {
-        // Obtener todos los libros para el select
         $libros = Libro::all();
-
         $prestamo = Prestamo::findOrFail($id);
         $destinarios = Destinario::all();
-
-
-        // Retornar la vista con el préstamo y los libros
+    
         return view('prestamos.edit', compact('prestamo', 'libros', 'destinarios'));
     }
 
 
     public function update(Request $request, Prestamo $prestamo)
     {
-        $prestamo->update($request->all());
-        return redirect()->route('prestamos.index')->with('success', 'Préstamo actualizado correctamente');
+        // Validar los datos de entrada
+        $request->validate([
+            'destinario_id' => 'required|string',
+            'fecha_de_prestamo' => 'required|date',
+            'fecha_de_devolución' => 'required|date|after:fecha_de_prestamo',
+            'libro_id' => 'required|array',
+            'libro_id.*' => 'exists:libros,id',
+        ]);
+
+        try {
+            // Restaurar la cantidad de libros del préstamo anterior
+            $libroAnterior = Libro::find($prestamo->libro_id);
+            if ($libroAnterior) {
+                $libroAnterior->increment('cantidad');
+            }
+
+            // Actualizar el préstamo con los nuevos valores
+            $prestamo->update([
+                'fecha_de_prestamo' => $request->fecha_de_prestamo,
+                'fecha_de_devolución' => $request->fecha_de_devolución,
+                'destinario_id' => $request->destinario_id,
+                'libro_id' => is_array($request->libro_id) ? $request->libro_id[0] : $request->libro_id, // Si quieres múltiples libros, necesitarás cambiar la lógica
+                'asignatura' => $request->asignatura,
+                'sancionado' => $request->sancionado ?? false,
+            ]);
+
+            // Restar la cantidad del nuevo libro
+            $libroNuevo = Libro::find($request->libro_id[0]);
+            if ($libroNuevo && $libroNuevo->cantidad > 0) {
+                $libroNuevo->decrement('cantidad');
+            } else {
+                return back()->withErrors("El libro seleccionado no está disponible.");
+            }
+
+            return redirect()->route('prestamos.index')->with('success', 'Préstamo actualizado correctamente');
+
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar préstamo: ' . $e->getMessage());
+            return back()->withErrors('Error al actualizar el préstamo. Intenta nuevamente.');
+        }
     }
 
     public function destroy(Prestamo $prestamo)

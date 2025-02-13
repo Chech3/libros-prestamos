@@ -13,18 +13,14 @@ return new class extends Migration
     {
         Schema::create('prestamos', function (Blueprint $table) {
             $table->id();
-            // $table->string('nombre_del_usuario');
             $table->unsignedBigInteger('libro_id'); // Relación con libros
             $table->string('asignatura')->nullable();
             $table->date('fecha_de_prestamo');
             $table->date('fecha_de_devolución');
-            $table->boolean('sancionado')->default(false);
-            // $table->integer('código_del_libro');
+            $table->boolean('sancionado')->default(false);  
             $table->timestamps();
-            
             $table->unsignedBigInteger('destinario_id')->nullable();
             $table->foreign('destinario_id')->references('id')->on('destinarios')->onDelete('cascade');
-
             $table->foreign('libro_id')->references('id')->on('libros')->onDelete('cascade');
         });
     }

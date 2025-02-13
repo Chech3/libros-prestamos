@@ -30,7 +30,9 @@ class Libro extends Model
         return $this->hasMany(Prestamo::class, 'libro_id'); // 'libro_id' es la clave foránea en la tabla prestamos
     }
     public function categoria()
-{
-    return $this->belongsTo(Categoria::class);
-}
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
+    
 }

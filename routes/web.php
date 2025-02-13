@@ -5,6 +5,7 @@ use App\Http\Controllers\DestinarioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LibroController;
 use App\Http\Controllers\PrestamoController;
+use App\Http\Controllers\ReporteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,13 +22,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('/libros', LibroController::class);
     Route::resource('/prestamos', PrestamoController::class);
+    Route::get('/reporte-prestamo/{prestamo}', [PrestamoController::class, 'imprimir'])->name('imprimir.prestamo');
     Route::resource('/categorias', CategoriaController::class);
     Route::resource('/destinarios', DestinarioController::class);
 
-    Route::get('/reporte-libros', [App\Http\Controllers\ReporteController::class, 'index'])->name('reporte.libros');
-    Route::post('/reporte-libros', [App\Http\Controllers\ReporteController::class, 'generarReporte'])->name('reporte.libros.generar');
+    Route::get('/reporte-libros', [ReporteController::class, 'index'])->name('reporte.libros');
+    Route::post('/reporte-libros', [ReporteController::class, 'generarReporte'])->name('reporte.libros.generar');
 
-    Route::get('/reporte-prestamo/{prestamo}', [App\Http\Controllers\PrestamoController::class, 'imprimir'])->name('imprimir.prestamo');
     
 
 });

@@ -15,6 +15,6 @@ class Destinario extends Model
 
     public function prestamo()
     {
-        return $this->hasMany(Prestamo::class);
+        return $this->hasMany(Prestamo::class, "destinario_id");
     }
 }

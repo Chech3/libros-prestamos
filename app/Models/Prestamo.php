@@ -20,12 +20,13 @@ class Prestamo extends Model
 
     public function libro()
     {
-        return $this->belongsTo(Libro::class, 'libro_id'); // 'libro_id' es la clave foránea
+        return $this->belongsTo(Libro::class, 'libro_id'); 
     }
+    
 
     public function destinario()
     {
-        return $this->belongsTo(Destinario::class);
+        return $this->belongsTo(Destinario::class, 'destinario_id');
     }
 
 }
